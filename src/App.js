@@ -1,23 +1,38 @@
-import logo from './logo.svg';
+import React, {useState} from "react";
+// import logo from './logo.svg';
 import './App.css';
+import * as yup from "yup";
+import { UserSchema} from "./Validations/Uservalidation";
+import {Login} from "./Login";
+import { Register } from './Register';
+
+
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+const createUser = async (event) =>{
+  event.preventDefault()
+  let formData ={
+    email:event.target[0].value, 
+    password:event.target[1].value,
+  };
+  const isValid = await UserSchema.isValid(formData);
+  console.log(isValid);
+};  
+  
+   const [currentForm, setCurrentForm] = useState('login');
+ 
+   const toggleForm =(formName) =>{
+    setCurrentForm(formName);
+
+   }
+  return(
+
+    <div className="main-Form-container App">
+       {
+      currentForm === "login" ? <Login onformSwitch={toggleForm}/> : <Register onformSwitch={toggleForm}/>
+    }      
     </div>
   );
 }
